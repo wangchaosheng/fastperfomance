@@ -19,7 +19,5 @@ from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('fastperfomance.urls')),
-    path('docs/', include_docs_urls(title='My API title', description='xxx描述')),
-    path('user/', include('apps.user.urls'))
+
 ]

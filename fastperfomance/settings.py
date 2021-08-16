@@ -115,7 +115,7 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 3306,
         'USER': 'root',
-        'PASSWORD': 'Abc@123456',
+        'PASSWORD': 'bYR-KFa-AEJ-Y9U2018',
         'NAME': 'performance',
     }
 }
