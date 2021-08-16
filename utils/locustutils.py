@@ -1,0 +1,144 @@
+import json
+import requests
+import time
+
+import os
+
+from threading import Thread
+from fastperfomance.settings import BASE_DIR
+
+
+def acc(f):
+    def wrapper(*args, **kwargs):
+        thr = Thread(target=f, args=args, kwargs=kwargs)
+
+        thr.start()
+
+    return wrapper
+
+
+@acc
+def osrun(s):
+    os.system(s)
+
+
+class LocustFile(object):
+    def __init__(self):
+        self.name = 'locustfile'
+
+    def prepare_locust_tests(self, qjson):
+        self.name = qjson['body']['name']
+        self.url = qjson['body']['request']['url']
+        self.method = qjson['body']['request']['method']
+        self.threads = 10
+        self.rate = 10
+        self.execution_time = 60
+        self.latency_time = 30
+        self.assertstr = 'success'
+        self.path = 'main2'
+        self.type = 'Https'
+
+        if 'params' in qjson['body']['request']:
+            params = qjson['body']['request']['params']
+            self.params = "?"
+            for key in params:
+                parm = key + "=" + params[key] + "&"
+
+                self.params += parm
+            self.params = self.params.rstrip("&")
+            self.url = self.url + self.params
+            # print(self.params)
+        else:
+            self.params = None
+
+        if 'json' in qjson['body']['request']:
+            jsondict = json.dumps(qjson['body']['request']['json'])
+            self.json = "payload := strings.NewReader(`" + str(jsondict) + "`)"
+            # print(self.json)
+        else:
+            self.json = None
+
+        if 'data' in qjson['body']['request']:
+            datas = qjson['body']['request']['data']
+            self.data = ""
+            for key in datas:
+                data = key + "=" + datas[key] + "&"
+
+                self.data += data
+            # print(self.data)
+            self.data = "payload := strings.NewReader(" + '"' + self.data.rstrip("&") + '"' + ")"
+            # print(self.data)
+
+        else:
+            self.data = None
+
+        if 'headers' in qjson['body']['request']:
+            self.headers = ""
+            headers = qjson['body']['request']['headers']
+            for key in headers:
+                header = "req.Header.Add(" + '"' + key + '"' + ',' + '"' + headers[key] + '"' + ')' + '\n'
+                self.headers += header + '    '
+            # print(self.headers)
+        else:
+            self.headers = None
+
+        return self
+
+
+def makefile(datatext):
+    filename = BASE_DIR + '/templates/main.go'
+    gofile = BASE_DIR + '/templates/' + datatext.path + '.go'
+
+    try:
+        os.remove(gofile)
+    except IOError:
+        print('文件不存在')
+
+    finally:
+        fp = open(filename, 'r')
+        content = fp.read()
+        fp.close()
+
+        c2 = content.replace('Url', '"%s"' % datatext.url, 1)
+        c2 = c2.replace('Method', '"%s"' % datatext.method, 1)
+        c2 = c2.replace('Rname', '"%s"' % datatext.name, 3)
+        c2 = c2.replace('Assertstr', '"%s"' % datatext.assertstr, 1)
+        c2 = c2.replace('Type', '"%s"' % datatext.type, 2)
+        if datatext.headers != None:
+            c2 = c2.replace('ReqHeader', datatext.headers, 1)
+        else:
+            c2 = c2.replace('ReqHeader', "")
+        if datatext.data == None and datatext.json == None:
+            print(datatext.data)
+            print(datatext.json)
+            c2 = c2.replace('Ipayload', 'nil')
+        else:
+            c2 = c2.replace('Ipayload', 'payload')
+        if datatext.data != None:
+            c2 = c2.replace('Payload', datatext.data)
+        if datatext.json != None:
+            c2 = c2.replace('Payload', datatext.json)
+        # print(c2)
+        f = open(gofile, 'w+')
+        f.write(c2)
+        read = f.readline()
+        # print(read)
+        f.close()
+    return gofile
+
+
+def run(parm):
+    osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, parm.path))
+    osrun(
+        'locust -f %s/templates/dumpy.py --master --master-bind-host=127.0.0.1 --master-bind-port=5557 ' % BASE_DIR
+    )
+
+    time.sleep(3)
+    data = {'user_count': parm.threads,
+            'spawn_rate': parm.rate}
+    print('-------------------------------------------------------------------------')
+
+    requests.post(url='http://0.0.0.0:8089/swarm', data=data)
+    print('-------------------------------------------------------------------------')
+    time.sleep(parm.execution_time)
+    requests.get(url='http://0.0.0.0:8089/stop')
