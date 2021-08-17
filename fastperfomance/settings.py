@@ -12,17 +12,11 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 import os
-
-# 项目根路由
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import datetime
 import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print(BASE_DIR)
 
 # 把某个路径添加到系统模块搜索路径中去
 # sys.path为一个列表
@@ -115,8 +109,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 3306,
         'USER': 'root',
-        'PASSWORD': 'bYR-KFa-AEJ-Y9U2018',
-        'NAME': 'performance',
+        'PASSWORD': '123456',
+        'NAME': 'new_performance',
     }
 }
 
@@ -154,28 +148,50 @@ USE_L10N = True
 
 USE_TZ = True
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 指定使用jwt token认证方式
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-        # 会话认证
-        'rest_framework.authentication.SessionAuthentication',
-        # 基本认证（账号密码）
-        'rest_framework.authentication.BasicAuthentication',
-
-    ],
-    # 指定用于支持coreapi的Schema
-    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
-    'DEFAULT_RENDERER_CLASSES':  [
+    # a.可以修改默认的渲染类（处理返回的数据形式）
+    'DEFAULT_RENDERER_CLASSES': [
         # b.列表中的元素是有优先级的，第一个元素优先级最高
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.backends.DjangoFilterBackend',
+        'rest_framework.filters.OrderingFilter',
+    ],
+    # a.需要指定分页引擎，可以使用默认的PageNumberPagination分页引擎类
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'utils.pagination.MyPagination',
+    # b.必须指定每一页的数据条数
+    'PAGE_SIZE': 20,
+
+    # 指定用于支持coreapi的Schema
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+
+    # DEFAULT_AUTHENTICATION_CLASSES指定默认的认证类（认证方式）
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 指定使用JWT token认证方式
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        # 会话认证
+        'rest_framework.authentication.SessionAuthentication',
+        # 基本认证（用户名和密码认证）
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+    # DEFAULT_PERMISSION_CLASSES指定认证之后，能获取到的权限
+    # 'DEFAULT_PERMISSION_CLASSES': [
+        # AllowAny，不需要登陆就有任意权限
+        # 'rest_framework.permissions.AllowAny',
+        # IsAuthenticated只要登录之后，就具备任意权限
+        # 'rest_framework.permissions.IsAuthenticated',
+        # IsAdminUser指定只有为管理员用户才用任意权限
+        # IsAuthenticatedOrReadOnly指定如果没登录，只能获取数据，如果登录成功，就具备任意权限
+        # 'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    # ],
 }
 
 JWT_AUTH = {
     # 指定处理登陆接口响应数据的参数
     'JWT_RESPONSE_PAYLOAD_HANDLER':
-        'fastperfomance.utils.jwt_handler.jwt_response_payload_handler',
+        'utils.jwt_handler.jwt_response_payload_handler',
     # 前端用户访问一些需要认证之后的接口，那么默认需要在请求头中携带参数，
     # 请求key为Authorization，值为  前缀+空格+token值  例：JWT xxxxxxxxx
     # 指定token有效期，默认为五分钟
