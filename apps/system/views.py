@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/8/18 14:55
+# @Author  : qingwu
+
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status
 from rest_framework.response import Response
