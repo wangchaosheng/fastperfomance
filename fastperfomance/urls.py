@@ -7,6 +7,7 @@ urlpatterns = [
     path('docs/', include_docs_urls(title='性能平台接口文档', description='xxx描述')),
     path('user/', include('user.urls')),
     path('', include('system.urls')),
+    path('', include('interfaces.urls')),
 
 
 ]
