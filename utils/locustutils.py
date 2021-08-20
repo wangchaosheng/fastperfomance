@@ -27,19 +27,19 @@ class LocustFile(object):
         self.name = 'locustfile'
 
     def prepare_locust_tests(self, qjson):
-        self.name = qjson['body']['name']
-        self.url = qjson['body']['request']['url']
-        self.method = qjson['body']['request']['method']
-        self.threads = 10
-        self.rate = 10
-        self.execution_time = 60
-        self.latency_time = 30
-        self.assertstr = 'success'
-        self.path = 'main2'
+        body =eval(qjson['request'])
+        self.name = body['name']
+        self.url = body['request']['url']
+        self.method = body['request']['method']
+        self.threads = qjson['threads']
+        self.rate = qjson['rate']
+        self.execution_time = qjson['execution_time']
+        self.assertstr = qjson['assertstr']
+        self.path = qjson['path']
         self.type = 'Https'
 
-        if 'params' in qjson['body']['request']:
-            params = qjson['body']['request']['params']
+        if 'params' in body['request']:
+            params = body['request']['params']
             self.params = "?"
             for key in params:
                 parm = key + "=" + params[key] + "&"
@@ -51,15 +51,15 @@ class LocustFile(object):
         else:
             self.params = None
 
-        if 'json' in qjson['body']['request']:
-            jsondict = json.dumps(qjson['body']['request']['json'])
+        if 'json' in body['request']:
+            jsondict = json.dumps(body['request']['json'])
             self.json = "payload := strings.NewReader(`" + str(jsondict) + "`)"
             # print(self.json)
         else:
             self.json = None
 
-        if 'data' in qjson['body']['request']:
-            datas = qjson['body']['request']['data']
+        if 'data' in body['request']:
+            datas = body['request']['data']
             self.data = ""
             for key in datas:
                 data = key + "=" + datas[key] + "&"
@@ -72,9 +72,9 @@ class LocustFile(object):
         else:
             self.data = None
 
-        if 'headers' in qjson['body']['request']:
+        if 'headers' in body['request']:
             self.headers = ""
-            headers = qjson['body']['request']['headers']
+            headers = body['request']['headers']
             for key in headers:
                 header = "req.Header.Add(" + '"' + key + '"' + ',' + '"' + headers[key] + '"' + ')' + '\n'
                 self.headers += header + '    '
@@ -87,7 +87,7 @@ class LocustFile(object):
 
 def makefile(datatext):
     filename = BASE_DIR + '/templates/main.go'
-    gofile = BASE_DIR + '/templates/' + datatext.path + '.go'
+    gofile = BASE_DIR + '/templates/' + 'main2' + '.go'
 
     try:
         os.remove(gofile)
@@ -128,7 +128,7 @@ def makefile(datatext):
 
 
 def run(parm):
-    osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, parm.path))
+    osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, 'main2'))
     osrun(
         'locust -f %s/templates/dumpy.py --master --master-bind-host=127.0.0.1 --master-bind-port=5557 ' % BASE_DIR
     )
