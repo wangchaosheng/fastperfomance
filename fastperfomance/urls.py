@@ -8,6 +8,7 @@ urlpatterns = [
     path('user/', include('user.urls')),
     path('', include('system.urls')),
     path('', include('interfaces.urls')),
+    path('', include('projects.urls')),
 
 
 ]

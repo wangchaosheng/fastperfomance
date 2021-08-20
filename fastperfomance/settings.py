@@ -110,8 +110,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 3306,
         'USER': 'root',
-        'PASSWORD': 'bYR-KFa-AEJ-Y9U2018',
-        'NAME': 'performance',
+        'PASSWORD': '123456',
+        'NAME': 'new_performance',
     }
 }
 
@@ -163,7 +163,7 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'DEFAULT_PAGINATION_CLASS': 'utils.pagination.MyPagination',
     # b.必须指定每一页的数据条数
-    'PAGE_SIZE': 20,
+    'PAGE_SIZE': 10,
 
     # 指定用于支持coreapi的Schema
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',

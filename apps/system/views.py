@@ -13,7 +13,7 @@ from utils.respones import SUCCESS
 class SystemViewSets(viewsets.ModelViewSet):
     queryset = System.objects.all()
     serializer_class = SystemModelSerializer
-    filter_backends = [DjangoFilterBackend]
+    # filter_backends = [DjangoFilterBackend]
     filterset_fields = ['name']
 
     def list(self, request, *args, **kwargs):
