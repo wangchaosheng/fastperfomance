@@ -13,6 +13,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
 
 
+
 class InterfaceViewSet(viewsets.ModelViewSet):
     queryset = Interfaces.objects.all()
     serializer_class = InterfacesSerializer
@@ -56,8 +57,8 @@ class InterfaceViewSet(viewsets.ModelViewSet):
         qdict = eval(str(serializer.data))
         # .replace(r'"', "")
         # 去掉所有的,
-        print(qdict)
-        print(type(qdict))
+        # print(qdict)
+        # print(type(qdict))
         api = LocustFile()
         # 生成了一个类对象去接收各个属性
         datatext = LocustFile.prepare_locust_tests(api, qdict)

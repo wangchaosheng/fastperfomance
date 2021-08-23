@@ -87,10 +87,11 @@ class LocustFile(object):
 
 def makefile(datatext):
     filename = BASE_DIR + '/templates/main.go'
-    gofile = BASE_DIR + '/templates/' + 'main2' + '.go'
+    gofile = BASE_DIR + '/templates/' + 'main2.go'
 
     try:
         os.remove(gofile)
+        print('=================')
     except IOError:
         print('文件不存在')
 
@@ -129,11 +130,10 @@ def makefile(datatext):
 
 def run(parm):
     osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, 'main2'))
-    osrun(
-        'locust -f %s/templates/dumpy.py --master --master-bind-host=127.0.0.1 --master-bind-port=5557 ' % BASE_DIR
-    )
+    print('=======================')
 
     time.sleep(3)
+    print('*******************')
     data = {'user_count': parm.threads,
             'spawn_rate': parm.rate}
     print('-------------------------------------------------------------------------')

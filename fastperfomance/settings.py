@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-&jugtpsl9mh2&pboqbbzafvh7_lolt1ym^8i8^+j#x1k8zjfiw
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
+# SILENCED_SYSTEM_CHECKS = ["template1.main2.go"]
 
 # Application definition
 
@@ -85,7 +85,7 @@ ROOT_URLCONF = 'fastperfomance.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'template1')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
