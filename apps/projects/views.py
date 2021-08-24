@@ -27,6 +27,10 @@ class ProjectsViewSets(viewsets.ModelViewSet):
         response = super().create(request, *args, **kwargs)
         return Response(SUCCESS, status=status.HTTP_201_CREATED)
 
+    def update(self, request, *args, **kwargs):
+        response = super().update(request, *args, **kwargs)
+        return Response(SUCCESS, status=status.HTTP_201_CREATED)
+
     def destroy(self, request, *args, **kwargs):
         request_obj = Projects.objects.get(id=request.parser_context.get("kwargs").get("pk"))
         request_obj.is_delete = 1
