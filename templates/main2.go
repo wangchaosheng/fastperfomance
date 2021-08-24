@@ -35,7 +35,7 @@ func request() {
 	body, _ := ioutil.ReadAll(res.Body)
 
 	elapsed := time.Since(start)
-	if strings.Contains(string(body), "success")  {
+	if strings.Contains(string(body), "do123")  {
 		boomer.RecordSuccess("Https", "创建项目接口_正向用例", elapsed.Nanoseconds()/int64(time.Millisecond), int64(10))
 	} else {
 		boomer.RecordFailure("Https", "创建项目接口_正向用例", elapsed.Nanoseconds()/int64(time.Millisecond), string(body))

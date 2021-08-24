@@ -110,8 +110,8 @@ DATABASES = {
         'HOST': 'localhost',
         'PORT': 3306,
         'USER': 'root',
-        'PASSWORD': '123456',
-        'NAME': 'new_performance',
+        'PASSWORD': 'bYR-KFa-AEJ-Y9U2018',
+        'NAME': 'performance',
     }
 }
 

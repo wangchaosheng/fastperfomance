@@ -17,7 +17,7 @@ from rest_framework.decorators import action
 class InterfaceViewSet(viewsets.ModelViewSet):
     queryset = Interfaces.objects.all()
     serializer_class = InterfacesSerializer
-    filter_fields = ('id', 'name', 'path', 'system_id')
+    filter_fields = ['id', 'name', 'path', 'system_id']
 
     def get_serializer_class(self):
         if self.action == 'run_single':

@@ -7,7 +7,7 @@ import os
 from threading import Thread
 from fastperfomance.settings import BASE_DIR
 
-
+# 多线程装饰器
 def acc(f):
     def wrapper(*args, **kwargs):
         thr = Thread(target=f, args=args, kwargs=kwargs)
@@ -16,7 +16,7 @@ def acc(f):
 
     return wrapper
 
-
+#多线程调用os.system
 @acc
 def osrun(s):
     os.system(s)
@@ -25,8 +25,9 @@ def osrun(s):
 class LocustFile(object):
     def __init__(self):
         self.name = 'locustfile'
-
+    #把请求信息丢给对象
     def prepare_locust_tests(self, qjson):
+        #请求信息转为字典
         body =eval(qjson['request'])
         self.name = body['name']
         self.url = body['request']['url']
@@ -91,7 +92,6 @@ def makefile(datatext):
 
     try:
         os.remove(gofile)
-        print('=================')
     except IOError:
         print('文件不存在')
 
@@ -130,15 +130,9 @@ def makefile(datatext):
 
 def run(parm):
     osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, 'main2'))
-    print('=======================')
-
     time.sleep(3)
-    print('*******************')
     data = {'user_count': parm.threads,
             'spawn_rate': parm.rate}
-    print('-------------------------------------------------------------------------')
-
     requests.post(url='http://0.0.0.0:8089/swarm', data=data)
-    print('-------------------------------------------------------------------------')
     time.sleep(parm.execution_time)
     requests.get(url='http://0.0.0.0:8089/stop')

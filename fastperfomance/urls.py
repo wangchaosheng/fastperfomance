@@ -9,6 +9,8 @@ urlpatterns = [
     path('', include('system.urls')),
     path('', include('interfaces.urls')),
     path('', include('projects.urls')),
+    path('', include('interfaces_executive_outcomes.urls')),
+
 
 
 ]

@@ -7,11 +7,15 @@ class ProjectExecutiveOutcomes(BaseModel):
     id = models.AutoField(verbose_name='id主键', primary_key=True, help_text='id主键')
     system = models.ForeignKey('system.System', on_delete=models.CASCADE, related_name='interface_executive_outcomes',
                                help_text='系统id')
-    project = models.ForeignKey('projects.Projects', on_delete=models.CASCADE, related_name='interface_executive_outcomes',
+    project = models.ForeignKey('projects.Projects', on_delete=models.CASCADE,
+                                related_name='interface_executive_outcomes',
                                 help_text='项目id')
     execute_log = models.ForeignKey('execute_logs.ExecuteLogs', on_delete=models.CASCADE,
                                     related_name='interface_executive_outcomes',
                                     help_text='执行记录id')
+    interfacename = models.CharField('接口名称', max_length=200, help_text='接口名称')
+    requests = models.IntegerField('请求数', help_text='请求数')
+    fails = models.IntegerField('失败数', help_text='失败数')
     threads = models.IntegerField('线程数', help_text='线程数')
     average = models.CharField('平均数', max_length=200, help_text='平均数')
     median = models.CharField('中位数', max_length=200, help_text='中位数')
