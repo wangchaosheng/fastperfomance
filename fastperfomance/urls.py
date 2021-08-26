@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include('interfaces.urls')),
     path('', include('projects.urls')),
     path('', include('interfaces_executive_outcomes.urls')),
+    path('', include('execute_logs.urls')),
 
 
 
