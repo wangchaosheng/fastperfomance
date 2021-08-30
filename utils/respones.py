@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2021/8/18 14:55
 # @Author  : qingwu
-import json
+
 import requests
 
-json.dumps()
 SUCCESS = {
     'msg': 'success',
     'status': 0
