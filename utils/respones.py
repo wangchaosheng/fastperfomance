@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2021/8/18 14:55
 # @Author  : qingwu
-
-import requests
 import json
+import requests
 
 SUCCESS = {
     'msg': 'success',
@@ -21,7 +20,7 @@ def debug_request(obj):
                                    params=data['params']).json()
         elif 'application/json' in str(data['headers']):
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
-                                   data=json.dumps(data['json'])).json()
+                                   data=json.dumps(data['json']))
         else:
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
                                    data=data['data']).json()
