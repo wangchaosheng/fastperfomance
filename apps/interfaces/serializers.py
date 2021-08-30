@@ -9,8 +9,13 @@ class InterfacesSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-
 class InterfacesRunSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interfaces
-        fields = ('request','path','method','threads','rate','execution_time','assertstr','is_delete')
+        fields = ('request', 'path', 'method', 'threads', 'rate', 'execution_time', 'assertstr', 'is_delete')
+
+
+class InterfacesDebuggingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Interfaces
+        fields = ('id',)

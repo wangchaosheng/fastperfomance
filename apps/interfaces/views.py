@@ -1,17 +1,17 @@
+from django.http import HttpResponse
 from django.shortcuts import render
-
+import requests
 # Create your views here.
 from rest_framework import viewsets, status
 from rest_framework.viewsets import GenericViewSet
 from interfaces import models, serializers
 from interfaces.models import Interfaces
-from interfaces.serializers import InterfacesSerializer, InterfacesRunSerializer
+from interfaces.serializers import InterfacesSerializer, InterfacesRunSerializer, InterfacesDebuggingSerializer
 from rest_framework.response import Response
-from utils.respones import SUCCESS
+from utils.respones import SUCCESS, debug_request
 from utils.locustutils import LocustFile, makefile, run
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
-
 
 
 class InterfaceViewSet(viewsets.ModelViewSet):
@@ -22,6 +22,8 @@ class InterfaceViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action == 'run_single':
             return InterfacesRunSerializer
+        elif self.action == 'debugging':
+            return InterfacesDebuggingSerializer
         else:
             return self.serializer_class
 
@@ -68,3 +70,10 @@ class InterfaceViewSet(viewsets.ModelViewSet):
         run(datatext)
         # 给对象和属性
         return Response(status=status.HTTP_200_OK)
+
+    @action(methods=['get'], detail=True)
+    def debugging(self, request, *args, **kwargs):
+        interfaces_obj = Interfaces.objects.get(id=request.parser_context.get("kwargs").get("pk"))
+        res = debug_request(interfaces_obj)
+        return Response(res, status=status.HTTP_200_OK)
+
