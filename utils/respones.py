@@ -3,6 +3,7 @@
 # @Author  : qingwu
 
 import requests
+import json
 
 SUCCESS = {
     'msg': 'success',
@@ -20,7 +21,7 @@ def debug_request(obj):
                                    params=data['params']).json()
         elif 'application/json' in str(data['headers']):
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
-                                   json=data['json']).json()
+                                   data=json.dumps(data['json'])).json()
         else:
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
                                    data=data['data']).json()
