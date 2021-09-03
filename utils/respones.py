@@ -3,14 +3,13 @@
 # @Author  : qingwu
 
 import requests
-import json
 
 SUCCESS = {
     'msg': 'success',
     'status': 0
 }
 
-FAILURE = {'status': 1}
+FAILURE = {'msg': '未找到此条数据，请重新核对数据id', 'status': 1}
 
 
 def debug_request(obj):
@@ -21,7 +20,7 @@ def debug_request(obj):
                                    params=data['params']).json()
         elif 'application/json' in str(data['headers']):
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
-                                   data=json.dumps(data['json'])).json()
+                                   json=data['json']).json()
         else:
             res = requests.request(method=data['method'].lower(), url=data['url'], headers=data['headers'],
                                    data=data['data']).json()

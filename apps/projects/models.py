@@ -5,7 +5,7 @@ from utils.base_models import BaseModel
 
 class Projects(BaseModel):
     id = models.AutoField(verbose_name='id主键', primary_key=True, help_text='id主键')
-    system_id = models.ForeignKey('system.System', on_delete=models.CASCADE, related_name='projects', help_text='系统id')
+    system = models.ForeignKey('system.System', on_delete=models.CASCADE, related_name='projects', help_text='系统id')
     name = models.CharField(verbose_name='项目名称', max_length=50, help_text='项目名称')
     include = models.TextField('包含的接口', help_text='包含的接口')
     creator = models.CharField(verbose_name='创建人', max_length=50, help_text='创建人')
