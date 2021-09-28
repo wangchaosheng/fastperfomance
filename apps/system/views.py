@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2021/8/18 14:55
 # @Author  : qingwu
-
+from django.http import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from system.models import System
 from system.serializers import SystemModelSerializer
-from utils.respones import SUCCESS
+from utils.respones import SUCCESS, FAILURE
 
 
 class SystemViewSets(viewsets.ModelViewSet):
@@ -34,7 +34,11 @@ class SystemViewSets(viewsets.ModelViewSet):
         return Response(SUCCESS, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
-        request_obj = System.objects.get(id=request.parser_context.get("kwargs").get("pk"))
-        request_obj.is_delete = 1
-        request_obj.save()
-        return Response(SUCCESS, status=status.HTTP_204_NO_CONTENT)
+        try:
+            request_obj = System.objects.get(id=request.parser_context.get("kwargs").get("pk"))
+        except Exception:
+            return Response(FAILURE, status=status.HTTP_404_NOT_FOUND)
+        else:
+            request_obj.is_delete = 1
+            request_obj.save()
+            return Response(SUCCESS, status=status.HTTP_201_CREATED)

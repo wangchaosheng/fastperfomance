@@ -6,7 +6,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from projects.models import Projects
 from projects.serializers import ProjectsModelSerializer
-from utils.respones import SUCCESS
+from utils.respones import SUCCESS, FAILURE
 
 
 class ProjectsViewSets(viewsets.ModelViewSet):
@@ -32,7 +32,11 @@ class ProjectsViewSets(viewsets.ModelViewSet):
         return Response(SUCCESS, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
-        request_obj = Projects.objects.get(id=request.parser_context.get("kwargs").get("pk"))
-        request_obj.is_delete = 1
-        request_obj.save()
-        return Response(SUCCESS, status=status.HTTP_204_NO_CONTENT)
+        try:
+            request_obj = Projects.objects.get(id=request.parser_context.get("kwargs").get("pk"))
+        except Exception:
+            return Response(FAILURE, status=status.HTTP_404_NOT_FOUND)
+        else:
+            request_obj.is_delete = 1
+            request_obj.save()
+            return Response(SUCCESS, status=status.HTTP_201_CREATED)
