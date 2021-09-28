@@ -7,6 +7,7 @@ import os
 from threading import Thread
 from fastperfomance.settings import BASE_DIR
 
+
 # 多线程装饰器
 def acc(f):
     def wrapper(*args, **kwargs):
@@ -16,7 +17,8 @@ def acc(f):
 
     return wrapper
 
-#多线程调用os.system
+
+# 多线程调用os.system
 @acc
 def osrun(s):
     os.system(s)
@@ -25,10 +27,11 @@ def osrun(s):
 class LocustFile(object):
     def __init__(self):
         self.name = 'locustfile'
-    #把请求信息丢给对象
+
+    # 把请求信息丢给对象
     def prepare_locust_tests(self, qjson):
-        #请求信息转为字典
-        body =eval(qjson['request'])
+        # 请求信息转为字典
+        body = eval(qjson['request'])
         self.name = body['name']
         self.url = body['request']['url']
         self.method = body['request']['method']
@@ -38,6 +41,8 @@ class LocustFile(object):
         self.assertstr = qjson['assertstr']
         self.path = qjson['path']
         self.type = 'Https'
+        self.id = qjson['id']
+        print(self.id)
 
         if 'params' in body['request']:
             params = body['request']['params']
@@ -129,10 +134,12 @@ def makefile(datatext):
 
 
 def run(parm):
-    osrun('cd %s/templates/;go run %s.go' % (BASE_DIR, 'main2'))
-    time.sleep(3)
-    data = {'user_count': parm.threads,
-            'spawn_rate': parm.rate}
-    requests.post(url='http://0.0.0.0:8089/swarm', data=data)
-    time.sleep(parm.execution_time)
-    requests.get(url='http://0.0.0.0:8089/stop')
+        osrun('cd %s/templates/;go run main2.go' % (BASE_DIR))
+        data = {'user_count': parm.threads,
+                'spawn_rate': parm.rate,
+                'stop_timeout': parm.execution_time}
+        time.sleep(3)
+        requests.post(url='http://0.0.0.0:8089/swarm', data=data)
+        time.sleep(parm.execution_time)
+        requests.get(url='http://0.0.0.0:8089/stop')
+        requests.get(url='http://0.0.0.0:8089/downpid')

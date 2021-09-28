@@ -12,8 +12,8 @@ from utils.respones import SUCCESS, debug_request
 from utils.locustutils import LocustFile, makefile, run
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import action
-
-
+import os
+from utils.locustutils import osrun
 class InterfaceViewSet(viewsets.ModelViewSet):
     queryset = Interfaces.objects.all()
     serializer_class = InterfacesSerializer
@@ -38,6 +38,8 @@ class InterfaceViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
+        print("_----------------")
+        print(request.data)
         return Response(SUCCESS, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
@@ -48,6 +50,7 @@ class InterfaceViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=True)
     def run_single(self, request, *args, **kwargs):
+
         try:
             locustapi = Interfaces.objects.get(id=request.parser_context.get("kwargs").get("pk"))
         except ObjectDoesNotExist:
