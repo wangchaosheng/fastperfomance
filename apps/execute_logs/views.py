@@ -24,14 +24,20 @@ class ExecuteLogViewSets(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        return Response(SUCCESS, status=status.HTTP_201_CREATED)
+
+        data = {
+            'execute_logs_id':response.data['id'],
+            'interface_id':response.data['interface_id'],
+            'msg': 'success',
+            'status': 0}
+        return Response(data, status=status.HTTP_201_CREATED)
 
     def update(self, request, *args, **kwargs):
         response = super().update(request, *args, **kwargs)
         return Response(SUCCESS, status=status.HTTP_201_CREATED)
 
     def destroy(self, request, *args, **kwargs):
-        request_obj = System.objects.get(id=request.parser_context.get("kwargs").get("pk"))
+        request_obj = ExecuteLogs.objects.get(id=request.parser_context.get("kwargs").get("pk"))
         request_obj.is_delete = 1
         request_obj.save()
         return Response(SUCCESS, status=status.HTTP_204_NO_CONTENT)

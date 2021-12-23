@@ -5,7 +5,7 @@ from utils.base_models import BaseModel
 
 class Interfaces(BaseModel):
     id = models.AutoField(verbose_name='id主键', primary_key=True, help_text='id主键')
-    system = models.ForeignKey('system.System', on_delete=models.CASCADE, related_name='interfaces',
+    system= models.ForeignKey('system.System', on_delete=models.CASCADE, related_name='interfaces',
                                   help_text='系统id')
     name = models.CharField('接口名称', max_length=200, help_text='接口名称')
     request = models.TextField('请求数据', help_text='请求信息')

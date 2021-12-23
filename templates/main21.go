@@ -36,15 +36,15 @@ func request() {
 
 	elapsed := time.Since(start)
 	if strings.Contains(string(body), "")  {
-		boomer.RecordSuccess("Https", "创建项目接口_正向用例", elapsed.Nanoseconds()/int64(time.Millisecond), int64(10))
+		boomer.RecordSuccess("Https", "创建项目接口_正向用例2", elapsed.Nanoseconds()/int64(time.Millisecond), int64(10))
 	} else {
-		boomer.RecordFailure("Https", "创建项目接口_正向用例", elapsed.Nanoseconds()/int64(time.Millisecond), string(body))
+		boomer.RecordFailure("Https", "创建项目接口_正向用例2", elapsed.Nanoseconds()/int64(time.Millisecond), string(body))
 	}
 }
 
 func main() {
 	task1 := &boomer.Task{
-		Name: "创建项目接口_正向用例",
+		Name: "创建项目接口_正向用例2",
 		// The weight is used to distribute goroutines over multiple tasks.
 		Weight: 1,
 		Fn:     request,

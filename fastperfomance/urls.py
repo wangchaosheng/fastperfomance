@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -11,7 +12,7 @@ urlpatterns = [
     path('', include('projects.urls')),
     path('', include('interfaces_executive_outcomes.urls')),
     path('', include('execute_logs.urls')),
-
+    url(r'^communication/', include('communication.urls')),
 
 
 ]

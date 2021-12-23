@@ -56,7 +56,9 @@ INSTALLED_APPS = [
     'project_interfaces',
     'reports',
     'system',
-    'user'
+    'user',
+    'communication.apps.CommunicationConfig'
+    
 ]
 
 MIDDLEWARE = [
@@ -111,7 +113,7 @@ DATABASES = {
         'PORT': 3306,
         'USER': 'root',
         'PASSWORD': 'bYR-KFa-AEJ-Y9U2018',
-        'NAME': 'performance',
+        'NAME': 'performance1',
     }
 }
 

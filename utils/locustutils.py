@@ -32,6 +32,7 @@ class LocustFile(object):
     def prepare_locust_tests(self, qjson):
         # 请求信息转为字典
         body = eval(qjson['request'])
+        print(body)
         self.name = body['name']
         self.url = body['request']['url']
         self.method = body['request']['method']
