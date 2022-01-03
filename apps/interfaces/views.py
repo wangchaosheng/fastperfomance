@@ -70,16 +70,25 @@ class InterfaceViewSet(viewsets.ModelViewSet):
         # api = LocustFile()
         # 生成了一个类对象去接收各个属性
         # datatext = LocustFile.prepare_locust_tests(api, qdict)
+        # try:
+        #     host = request.data.getlist('servAddr[]')
+        #     print(request.data)
+        # except Exception as e:
+        #     res= e
+        #     return Response(res, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        print(request.data)
+        print(type(request.data))
         host = request.data.getlist('servAddr[]')
         print(host)
         json1 = makejson(qdict)
+
         # print(json.dumps(json1,indent=4))
         try:
             res = initBoomer(host,json1)
             return Response(res, status=status.HTTP_200_OK)
         except Exception as e:
             res = e
-            return Response(res, status=status.HTTP_200_OK)
+            return Response(res, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         # 接受属性
         # makefile(datatext)
         # 把替换好的对象传进去的到文件地址

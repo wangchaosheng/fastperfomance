@@ -13,14 +13,6 @@ def request_client(request):
     return Response(res)
 
 
-@api_view(['POST'])
-def init_boomer(request):
-    host = request.data.getlist('servAddr[]')
-
-    print(host)
-    # res = initBoomer(host)
-    return Response('ok')
-
 
 @api_view(['POST'])
 def shutdown_boomer(request):
@@ -35,7 +27,7 @@ def shutdown_boomer(request):
 
 @api_view(['POST'])
 def swarm(request):
-    clients = request.data.getlist('client')
+    clients = request.data.getlist('client[]')
     user_count = request.data.getlist('user_count')
     hatch_rate = request.data.getlist('hatch_rate')
     run_time = request.data.getlist('run_time')
