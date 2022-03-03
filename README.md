@@ -1,0 +1,2 @@
+# fastperfomance
+fastperfomance只负责管理测试用例，压测服务需要配套使用doommanager
